@@ -1,7 +1,18 @@
 # TODO:
 # - build provider (see %%build section)
 # - javadoc
-#
+# NOTE:
+# - it is possible to build it using java-sun, but sun's JRE provides better
+#   implementation of JSSE. This package is a JSSE replacemnt for alternative
+#   JREs, like java-gcj-compat.
+
+# Conditional build
+%if "%{pld_release}" == "ti"
+%bcond_without	java_sun	# build with gcj
+%else
+%bcond_with	java_sun	# build with java-sun
+%endif
+
 %include	/usr/lib/rpm/macros.java
 #
 %define		srcname	jessie
@@ -9,22 +20,23 @@ Summary:	A free implementation of the JSSE
 Summary(pl.UTF-8):	Wolna implementacja JSSE
 Name:		java-jessie
 Version:	1.0.1
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Libraries/Java
 Source0:	http://syzygy.metastatic.org/jessie/jessie-%{version}.tar.gz
 # Source0-md5:	c14db8483ca9fae428b8497659861ef0
 URL:		http://www.nongnu.org/jessie/
 BuildRequires:	ant
-BuildRequires:	java-gcj-compat-devel
+%{!?with_java_sun:BuildRequires:	java-gcj-compat-devel}
+%{?with_java_sun:BuildRequires:	java-sun}
 BuildRequires:	java-gnu-classpath
 BuildRequires:	java-gnu-crypto >= 2.0.1
 BuildRequires:	jpackage-utils >= 0:1.6
+BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires:	jpackage-utils
 Provides:	jsse = 1.4
-Conflicts:	java-sun-jre
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -43,11 +55,11 @@ specification and the public protocol specifications.
 
 %build
 %ant clean
-%ant -Dbuild.compiler=extJavac jsse.jar
+%ant jsse.jar
 
 # Does not build
 %if %{with provider}
-%ant -Dbuild.compiler=extJavac compile-provider
+%ant compile-provider
 %endif
 
 %install
