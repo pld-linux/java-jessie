@@ -1,17 +1,11 @@
 # TODO:
 # - build provider (see %%build section)
 # - javadoc
+# - consider C: java-sun, see NOTE
 # NOTE:
 # - it is possible to build it using java-sun, but sun's JRE provides better
 #   implementation of JSSE. This package is a JSSE replacemnt for alternative
 #   JREs, like java-gcj-compat.
-
-# Conditional build
-%if "%{pld_release}" == "ti"
-%bcond_without	java_sun	# build with gcj
-%else
-%bcond_with	java_sun	# build with java-sun
-%endif
 
 %include	/usr/lib/rpm/macros.java
 #
@@ -27,16 +21,14 @@ Source0:	http://syzygy.metastatic.org/jessie/jessie-%{version}.tar.gz
 # Source0-md5:	c14db8483ca9fae428b8497659861ef0
 URL:		http://www.nongnu.org/jessie/
 BuildRequires:	ant
-%{!?with_java_sun:BuildRequires:	java-gcj-compat-devel}
-%{?with_java_sun:BuildRequires:	java-sun}
 BuildRequires:	java-gnu-classpath
 BuildRequires:	java-gnu-crypto >= 2.0.1
+BuildRequires:	java-sun
 BuildRequires:	jpackage-utils >= 0:1.6
-BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires:	jpackage-utils
-Provides:	jsse = 1.4
+Provides:	java(jsse) = 1.4
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
