@@ -23,7 +23,7 @@ URL:		http://www.nongnu.org/jessie/
 BuildRequires:	ant
 BuildRequires:	java-gnu-classpath
 BuildRequires:	java-gnu-crypto >= 2.0.1
-BuildRequires:	java-sun
+BuildRequires:	jdk
 BuildRequires:	jpackage-utils >= 0:1.6
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpmbuild(macros) >= 1.300
