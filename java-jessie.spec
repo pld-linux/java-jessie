@@ -7,7 +7,6 @@
 #   implementation of JSSE. This package is a JSSE replacemnt for alternative
 #   JREs, like java-gcj-compat.
 
-%include	/usr/lib/rpm/macros.java
 #
 %define		srcname	jessie
 Summary:	A free implementation of the JSSE
